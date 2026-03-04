@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surprise! Happy Holi!</title>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Nunito:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#FF4FA3;--yellow:#FFD600;--green:#00C853;--blue:#2979FF;--orange:#FF6D00;--purple:#AA00FF;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;min-height:100vh;font-family:'Nunito',sans-serif;overflow-x:hidden;background:#0d0010;color:white;}
+#splash{position:fixed;inset:0;z-index:9999;background:#0d0010;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:opacity 0.8s ease,transform 0.8s ease;}
+#splash.hide{opacity:0;pointer-events:none;transform:scale(1.08);}
+.sring{width:140px;height:140px;border-radius:50%;border:3px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:30px;}
+.sring::before{content:'';position:absolute;inset:-3px;border-radius:50%;border:3px solid transparent;border-top-color:var(--pink);border-right-color:var(--yellow);animation:spinRing 1.5s linear infinite;}
+.semoji{font-size:64px;animation:pulseE 1.5s ease-in-out infinite;}
+.stxt{font-family:'Righteous',sans-serif;font-size:22px;color:rgba(255,255,255,0.7);letter-spacing:3px;}
+.ssub{font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px;letter-spacing:2px;}
+.lbar{width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:10px;margin-top:30px;overflow:hidden;}
+.lfill{height:100%;background:linear-gradient(90deg,var(--pink),var(--yellow),var(--green),var(--blue));background-size:300%;animation:loadFill 2.5s ease forwards;border-radius:10px;}
+#canvas{position:fixed;inset:0;pointer-events:none;z-index:100;}
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#2d0050 0%,#0d0010 70%);}
+.hblob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.22;pointer-events:none;animation:driftB var(--d) ease-in-out infinite alternate;}
+.sup{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:16px;opacity:0;animation:fadeUp 0.8s ease 3s forwards;}
+.htitle{font-family:'Righteous',sans-serif;font-size:clamp(48px,13vw,96px);line-height:1;margin-bottom:16px;opacity:0;animation:fadeUp 0.9s ease 3.2s forwards;}
+.l1{color:white;display:block;}
+.l2{display:block;background:linear-gradient(90deg,#FF4FA3,#FFD600,#00C853,#2979FF,#AA00FF,#FF4FA3);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite;}
+.hsub{font-size:clamp(15px,4vw,18px);color:rgba(255,255,255,0.7);line-height:1.7;max-width:480px;margin-bottom:40px;opacity:0;animation:fadeUp 0.9s ease 3.4s forwards;}
+.cdrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;opacity:0;animation:fadeUp 1s ease 3.6s forwards;}
+.cdot{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 20px rgba(0,0,0,0.4);transition:transform 0.2s;cursor:pointer;animation:wobbleDot 3s ease-in-out infinite;}
+.cdot:hover{transform:scale(1.35) rotate(15deg);}
+.cdot:nth-child(1){background:var(--pink);}
+.cdot:nth-child(2){background:var(--yellow);animation-delay:.2s;}
+.cdot:nth-child(3){background:var(--green);animation-delay:.4s;}
+.cdot:nth-child(4){background:var(--blue);animation-delay:.6s;}
+.cdot:nth-child(5){background:var(--orange);animation-delay:.8s;}
+.cdot:nth-child(6){background:var(--purple);animation-delay:1s;}
+.scta{opacity:0;animation:fadeUp 1s ease 3.8s forwards;font-size:13px;color:rgba(255,255,255,0.45);letter-spacing:3px;text-transform:uppercase;}
+.scta::after{content:'';display:block;width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,0.4),transparent);margin:12px auto 0;animation:pulseA 1.5s ease-in-out infinite;}
+.sec{padding:80px 24px;text-align:center;position:relative;}
+.stag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:14px;}
+.stitle{font-family:'Righteous',sans-serif;font-size:clamp(28px,7vw,52px);margin-bottom:14px;line-height:1.2;}
+.wbg{background:linear-gradient(180deg,#0d0010 0%,#150025 50%,#0d0010 100%);position:relative;overflow:hidden;}
+.wbg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(255,79,163,0.12) 0%,transparent 50%),radial-gradient(circle at 80% 50%,rgba(41,121,255,0.12) 0%,transparent 50%);}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;max-width:900px;margin:40px auto 0;position:relative;z-index:2;}
+.wcard{border-radius:20px;padding:28px 24px;text-align:left;position:relative;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;border:1px solid rgba(255,255,255,0.1);}
+.wcard:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.5);}
+.wc1{background:linear-gradient(135deg,#1a0030,#3d0066);}
+.wc2{background:linear-gradient(135deg,#001a3d,#003d99);}
+.wc3{background:linear-gradient(135deg,#001a0d,#004d26);}
+.wc4{background:linear-gradient(135deg,#3d1a00,#994400);}
+.wc5{background:linear-gradient(135deg,#1a001a,#660066);}
+.wc6{background:linear-gradient(135deg,#1a1a00,#666600);}
+.wemoji{font-size:36px;margin-bottom:12px;display:block;}
+.wtitle{font-family:'Righteous',sans-serif;font-size:18px;margin-bottom:8px;background:linear-gradient(90deg,#FF4FA3,#FFD600,#00C853,#FF4FA3);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite;}
+.wtext{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.65;}
+.qbg{background:linear-gradient(180deg,#0d0010,#050020,#0d0010);position:relative;overflow:hidden;}
+.qbg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 10% 30%,rgba(255,214,0,0.08) 0%,transparent 50%),radial-gradient(circle at 90% 70%,rgba(170,0,255,0.1) 0%,transparent 50%);}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;max-width:900px;margin:40px auto 0;position:relative;z-index:2;}
+.qcard{border-radius:18px;padding:22px 18px;position:relative;overflow:hidden;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),box-shadow 0.3s;cursor:default;}
+.qcard:hover{transform:scale(1.04) rotate(-0.5deg);box-shadow:0 20px 50px rgba(0,0,0,0.6);}
+.qcard::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.06);border-radius:18px;border:1px solid rgba(255,255,255,0.12);}
+.q1{background:linear-gradient(135deg,#c9005a,#ff4fa3);}
+.q2{background:linear-gradient(135deg,#7a0000,#cc0000);}
+.q3{background:linear-gradient(135deg,#7a5900,#e6b800);}
+.q4{background:linear-gradient(135deg,#004d1a,#00a33a);}
+.q5{background:linear-gradient(135deg,#001a7a,#0044cc);}
+.q6{background:linear-gradient(135deg,#2d0057,#7b00cc);}
+.q7{background:linear-gradient(135deg,#7a2c00,#cc5500);}
+.q8{background:linear-gradient(135deg,#1a1a1a,#444);}
+.qemoji{font-size:32px;margin-bottom:10px;display:block;}
+.qcolor{font-family:'Righteous',sans-serif;font-size:20px;color:white;margin-bottom:4px;}
+.qbadge{display:inline-block;background:rgba(255,255,255,0.2);border-radius:30px;padding:3px 10px;font-size:10px;font-weight:900;color:white;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;border:1px solid rgba(255,255,255,0.25);}
+.qtext{font-size:12.5px;color:rgba(255,255,255,0.88);line-height:1.55;font-style:italic;}
+.fsec{background:radial-gradient(ellipse at 50% 60%,#2d0050 0%,#0d0010 70%);padding:100px 24px;text-align:center;position:relative;overflow:hidden;}
+.fsec::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(255,79,163,0.2) 0%,transparent 50%),radial-gradient(circle at 70% 60%,rgba(41,121,255,0.15) 0%,transparent 50%);}
+.fbig{font-size:clamp(56px,15vw,120px);display:block;animation:bounce 1s ease-in-out infinite;margin-bottom:16px;position:relative;z-index:2;}
+.ftitle{font-family:'Righteous',sans-serif;font-size:clamp(32px,8vw,64px);background:linear-gradient(90deg,#FF4FA3,#FFD600,#00C853,#2979FF,#AA00FF,#FF4FA3);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite;margin-bottom:16px;position:relative;z-index:2;line-height:1.2;}
+.fmsg{font-size:clamp(15px,4vw,18px);color:rgba(255,255,255,0.7);max-width:500px;margin:0 auto 36px;line-height:1.7;position:relative;z-index:2;}
+.snudge{display:inline-block;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:16px;padding:18px 28px;font-size:15px;color:rgba(255,255,255,0.8);line-height:1.7;position:relative;z-index:2;max-width:380px;}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@keyframes spinRing{to{transform:rotate(360deg)}}
+@keyframes pulseE{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes loadFill{from{width:0}to{width:100%}}
+@keyframes driftB{from{transform:translate(0,0) scale(1)}to{transform:translate(var(--tx),var(--ty)) scale(1.1)}}
+@keyframes wobbleDot{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulseA{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="sring"><span class="semoji">🎨</span></div>
+  <p class="stxt">Something Colorful</p>
+  <p class="ssub">is loading for you...</p>
+  <div class="lbar"><div class="lfill"></div></div>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<section id="hero">
+  <div class="hblob" style="width:400px;height:400px;background:var(--pink);top:-150px;left:-120px;--d:7s;--tx:30px;--ty:20px;"></div>
+  <div class="hblob" style="width:350px;height:350px;background:var(--yellow);top:100px;right:-120px;--d:9s;--tx:-20px;--ty:30px;"></div>
+  <div class="hblob" style="width:300px;height:300px;background:var(--blue);bottom:-100px;left:10%;--d:6s;--tx:20px;--ty:-15px;"></div>
+  <div class="hblob" style="width:280px;height:280px;background:var(--green);bottom:-80px;right:5%;--d:8s;--tx:-25px;--ty:-20px;"></div>
+  <p class="sup">🎊 surprise! you found this ✦</p>
+  <h1 class="htitle"><span class="l1">Happy</span><span class="l2">Holi! 🎨</span></h1>
+  <p class="hsub">May your day be as loud, colorful, and outrageously fun as this page. You deserve every drop of joy today. 🌈</p>
+  <div class="cdrow">
+    <div class="cdot" onclick="burst(this,'#FF4FA3')">🩷</div>
+    <div class="cdot" onclick="burst(this,'#FFD600')">💛</div>
+    <div class="cdot" onclick="burst(this,'#00C853')">💚</div>
+    <div class="cdot" onclick="burst(this,'#2979FF')">💙</div>
+    <div class="cdot" onclick="burst(this,'#FF6D00')">🧡</div>
+    <div class="cdot" onclick="burst(this,'#AA00FF')">💜</div>
+  </div>
+  <p class="scta">scroll to explore</p>
+</section>
+
+<section class="sec wbg reveal">
+  <p class="stag">✦ straight from the heart ✦</p>
+  <h2 class="stitle" style="background:linear-gradient(90deg,#FF4FA3,#FFD600,#00C853);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite;background-size:300%;">Holi Wishes, Just For You</h2>
+  <div class="wgrid">
+    <div class="wcard wc1 reveal"><span class="wemoji">🌈</span><h3 class="wtitle">May Colors Find You</h3><p class="wtext">Even on your greyest days, may the colors of Holi remind you that life is outrageously beautiful — and so are you.</p></div>
+    <div class="wcard wc2 reveal"><span class="wemoji">💙</span><h3 class="wtitle">New Chapter Energy</h3><p class="wtext">Holi washes away the old. May this mark the beginning of something wonderful — a dream, a friendship, a fresh start.</p></div>
+    <div class="wcard wc3 reveal"><span class="wemoji">🌸</span><h3 class="wtitle">Joy That Sticks</h3><p class="wtext">Just like gulal on a white kurta — may joy stick to you this year and refuse to wash off no matter what life throws. 😄</p></div>
+    <div class="wcard wc4 reveal"><span class="wemoji">🔥</span><h3 class="wtitle">Burn the Bad Stuff</h3><p class="wtext">Holika burns tonight. May everything that no longer serves you — stress, grudges, self-doubt — go with it. 🕯️</p></div>
+    <div class="wcard wc5 reveal"><span class="wemoji">🎊</span><h3 class="wtitle">Laugh Until You Cry</h3><p class="wtext">May you have at least one moment today where you laugh so hard your stomach hurts and colors are flying everywhere. 😂</p></div>
+    <div class="wcard wc6 reveal"><span class="wemoji">✨</span><h3 class="wtitle">You're Someone's Color</h3><p class="wtext">To someone out there, you are the color that makes their world brighter. Never forget that. Happy Holi, wonderful human. 💛</p></div>
+  </div>
+</section>
+
+<section class="sec qbg reveal">
+  <p class="stag">✦ holi personality quiz ✦</p>
+  <h2 class="stitle" style="color:white;">What Does Your Color Say? 🔮</h2>
+  <p style="color:rgba(255,255,255,0.55);font-size:15px;max-width:480px;margin:0 auto;line-height:1.6;">Find your Holi color — then tag the friend whose description is way too accurate 👇</p>
+  <div class="qgrid">
+    <div class="qcard q1 reveal"><span class="qemoji">🩷</span><div class="qcolor">Pink</div><div class="qbadge">The Dramatic One</div><p class="qtext">"Wore white ON PURPOSE. Every Holi is your Oscar moment. Somehow still looked gorgeous. Total icon." 👑</p></div>
+    <div class="qcard q2 reveal"><span class="qemoji">❤️</span><div class="qcolor">Red</div><div class="qbadge">The Ruthless One</div><p class="qtext">"You have a list. Been waiting since last Holi. Every balloon is calculated. You don't play — you conquer." 🎯</p></div>
+    <div class="qcard q3 reveal"><span class="qemoji">💛</span><div class="qcolor">Yellow</div><div class="qbadge">The Sunshine</div><p class="qtext">"Brought extra gujiyas. Dragged people out of hiding. You're literally the reason this Holi was fun." ☀️</p></div>
+    <div class="qcard q4 reveal"><span class="qemoji">💚</span><div class="qcolor">Green</div><div class="qbadge">The Sneaky One</div><p class="qtext">"Silent. Patient. Dangerous. Waited for the perfect moment — then vanished into the crowd like a ghost." 👻</p></div>
+    <div class="qcard q5 reveal"><span class="qemoji">💙</span><div class="qcolor">Blue</div><div class="qbadge">The Overthinker</div><p class="qtext">"Googled 'how to remove blue' BEFORE the event. But between 11am and 2pm — you let go. Beautiful." 🌊</p></div>
+    <div class="qcard q6 reveal"><span class="qemoji">💜</span><div class="qcolor">Purple</div><div class="qbadge">The Mysterious One</div><p class="qtext">"Arrived late. Said little. 3 handfuls. 4 gujiyas. Left. People are still wondering who you are." ✨</p></div>
+    <div class="qcard q7 reveal"><span class="qemoji">🧡</span><div class="qcolor">Orange</div><div class="qbadge">The Hype Person</div><p class="qtext">"Started the music. Made everyone dance. Invented 3 new traditions today alone. Without you — boring." 🎉</p></div>
+    <div class="qcard q8 reveal"><span class="qemoji">🤍</span><div class="qcolor">White</div><div class="qbadge">The Untouchable</div><p class="qtext">"Walked through a war zone. Emerged spotless. Either divine protection or the universe just respects you." 🕊️</p></div>
+  </div>
+</section>
+
+<section class="fsec reveal">
+  <span class="fbig">🎨</span>
+  <h2 class="ftitle">Spread Colors.<br>Spread Joy.<br>Happy Holi! 🎊</h2>
+  <p class="fmsg">However you celebrate — with colors, food, music, or just a quiet smile — today is yours. Make it colorful. 🌈</p>
+  <div class="snudge">
+    🌸 <strong style="color:white;">Share the love!</strong><br>
+    Send this link to someone and make their Holi a little more special today 💛<br><br>
+    <span style="color:rgba(255,255,255,0.45);font-size:12px;">Happy Holi from me to you ✦</span>
+  </div>
+</section>
+
+<script>
+window.addEventListener('load',()=>{
+  setTimeout(()=>{document.getElementById('splash').classList.add('hide');startPowder();},2800);
+});
+const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
+let W,H,particles=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const hC=['#FF4FA3','#FFD600','#00C853','#2979FF','#FF6D00','#AA00FF'];
+function spawnP(x,y,color,n=30){
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2,s=Math.random()*6+2;
+    particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-Math.random()*3,
+      r:Math.random()*10+4,color:color||hC[Math.floor(Math.random()*hC.length)],
+      alpha:1,gravity:0.15,decay:Math.random()*0.02+0.012,
+      shape:Math.random()>.5?'circle':'rect',
+      rot:Math.random()*Math.PI*2,rotV:(Math.random()-.5)*0.2});
+  }
+}
+function startPowder(){
+  for(let i=0;i<6;i++)setTimeout(()=>spawnP(Math.random()*W,Math.random()*H*0.5,hC[i],25),i*200);
+  animate();
+}
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  particles=particles.filter(p=>p.alpha>0.01);
+  particles.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.gravity;p.vx*=0.99;
+    p.alpha-=p.decay;p.rot+=p.rotV;
+    ctx.save();ctx.globalAlpha=Math.max(0,p.alpha);ctx.fillStyle=p.color;
+    ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+    if(p.shape==='circle'){ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();}
+    else{ctx.fillRect(-p.r/2,-p.r/3,p.r,p.r*0.6);}
+    ctx.restore();
+  });
+  requestAnimationFrame(animate);
+}
+function burst(el,color){
+  const r=el.getBoundingClientRect();
+  spawnP(r.left+r.width/2,r.top+r.height/2,color,45);
+}
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('cdot'))return;
+  spawnP(e.clientX,e.clientY,hC[Math.floor(Math.random()*hC.length)],15);
+});
+const obs=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting)e.target.classList.add('visible');
+}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
